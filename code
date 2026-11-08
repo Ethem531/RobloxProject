@@ -1,0 +1,501 @@
+Here is a clean, dark-themed HTML document with a blue accent. It includes a central "TYPE HERE" heading, a rounded input box for game IDs, and a visual feedback system for successful or failed searches.
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAME ID LOOKUP · dark blue</title>
+    <style>
+        /* RESET & GLOBAL */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background: #0b0e14;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            position: relative;
+            /* smooth mouse follower via pseudo elements — but we’ll do real cursor glow with JS */
+        }
+
+        /* main card – clean, floating, dark with subtle blue border */
+        .container {
+            background: #10161f;
+            border: 1px solid #1e3a5f;
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(0, 120, 255, 0.1);
+            border-radius: 2.5rem;
+            padding: 3rem 2.5rem;
+            max-width: 720px;
+            width: 100%;
+            text-align: center;
+            transition: box-shadow 0.2s ease;
+            backdrop-filter: blur(2px);
+        }
+
+        /* BIG dark blue title (matching "TYPE HERE") */
+        .main-title {
+            font-size: clamp(3.2rem, 15vw, 6rem);
+            font-weight: 800;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: #0a2540; /* deep dark blue */
+            text-shadow: 0 0 10px rgba(0, 120, 255, 0.5), 0 0 20px rgba(0, 80, 200, 0.3);
+            line-height: 1.1;
+            margin-bottom: 0.4rem;
+            word-break: break-word;
+        }
+
+        /* secondary smaller text */
+        .sub-title {
+            font-size: 1.25rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #3d6a9e;
+            margin-bottom: 2.5rem;
+            text-shadow: 0 0 6px rgba(0, 150, 255, 0.2);
+        }
+
+        /* ROUNDED TEXT BOX — input area */
+        .input-wrapper {
+            margin: 0 auto 2rem auto;
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+        }
+
+        .game-input {
+            width: 100%;
+            background: #0c121c;
+            border: 2px solid #1e3a5f;
+            border-radius: 60px;           /* round corners */
+            padding: 1.2rem 2rem;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #e3f0ff;
+            letter-spacing: 1px;
+            outline: none;
+            transition: all 0.2s ease;
+            text-align: center;
+            box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(0, 160, 255, 0.1);
+        }
+
+        .game-input::placeholder {
+            color: #3d5f82;
+            font-weight: 400;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+        }
+
+        .game-input:focus {
+            border-color: #2b6fc9;
+            box-shadow: 0 0 0 4px rgba(0, 120, 255, 0.2), inset 0 4px 12px #000000;
+            background: #0e1622;
+        }
+
+        /* result / link area */
+        .result-area {
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 0.8rem;
+        }
+
+        /* gofile link – clean button style */
+        .gofile-link {
+            display: inline-block;
+            background: #0b1b2e;
+            border: 1.5px solid #2b6fc9;
+            border-radius: 60px;
+            padding: 0.9rem 2.2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: #7db9ff;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 12px rgba(0, 120, 255, 0.2);
+            word-break: break-all;
+            max-width: 100%;
+        }
+
+        .gofile-link:hover {
+            background: #11273f;
+            border-color: #3d8aff;
+            color: #b0d4ff;
+            box-shadow: 0 0 24px rgba(0, 140, 255, 0.6);
+            transform: scale(1.02);
+        }
+
+        .gofile-link:active {
+            transform: scale(0.98);
+        }
+
+        /* error message */
+        .error-message {
+            color: #ff7b7b;
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            background: rgba(120, 20, 20, 0.2);
+            padding: 0.6rem 1.5rem;
+            border-radius: 60px;
+            border: 1px solid #b33a3a;
+            backdrop-filter: blur(4px);
+            margin: 0;
+            transition: all 0.1s;
+        }
+
+        /* shake animation */
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            15% { transform: translateX(-8px); }
+            30% { transform: translateX(8px); }
+            45% { transform: translateX(-6px); }
+            60% { transform: translateX(6px); }
+            75% { transform: translateX(-3px); }
+            90% { transform: translateX(3px); }
+            100% { transform: translateX(0); }
+        }
+
+        .shake {
+            animation: shake 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+        }
+
+        /* subtle hint for mouse effect */
+        .mouse-hint {
+            position: fixed;
+            bottom: 16px;
+            right: 24px;
+            color: #1e3a5f;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            user-select: none;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        /* custom mouse glow layer (canvas-free, div follow) */
+        .cursor-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(100,180,255,0.5) 40%, transparent 80%);
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.15s, transform 0.05s;
+            mix-blend-mode: screen;
+            opacity: 0;
+            will-change: transform, opacity;
+            filter: blur(2px);
+        }
+
+        /* larger white burst on click */
+        .cursor-glow.click-burst {
+            opacity: 0.9;
+            transform: translate(-50%, -50%) scale(3.5);
+            transition: transform 0.2s, opacity 0.1s;
+        }
+
+        /* dark blue big text — ensures on top */
+        .main-title, .sub-title, .game-input, .result-area {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* mobile adjustments */
+        @media (max-width: 480px) {
+            .container {
+                padding: 2.5rem 1.5rem;
+                border-radius: 1.8rem;
+            }
+            .main-title {
+                letter-spacing: 3px;
+            }
+            .game-input {
+                padding: 1rem 1.2rem;
+                font-size: 1rem;
+            }
+            .gofile-link {
+                font-size: 0.95rem;
+                padding: 0.75rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- custom mouse follower (white glow) -->
+    <div class="cursor-glow" id="cursorGlow"></div>
+
+    <main class="container">
+        <!-- BIG dark blue "TYPE HERE" -->
+        <h1 class="main-title">TYPE HERE</h1>
+
+        <!-- smaller "TEXT HERE2" -->
+        <div class="sub-title">Roblox decompiling</div>
+
+        <!-- rounded text box -->
+        <div class="input-wrapper">
+            <input 
+                type="text" 
+                class="game-input" 
+                id="gameIdInput"
+                placeholder="TYPE game ID here" 
+                autocomplete="off"
+                aria-label="Game ID"
+            >
+        </div>
+
+        <!-- result will be inserted here -->
+        <div class="result-area" id="resultArea"></div>
+    </main>
+
+    <div class="mouse-hint">✦ MOVE & CLICK</div>
+
+    <script>
+        (function() {
+            // ------- CUSTOM WHITE MOUSE GLOW -------
+            const glow = document.getElementById('cursorGlow');
+            let mouseX = 0, mouseY = 0;
+            let glowX = 0, glowY = 0;
+            let isMoving = false;
+
+            // smooth follow with requestAnimationFrame
+            function updateGlow() {
+                // lerp for smoothness
+                glowX += (mouseX - glowX) * 0.15;
+                glowY += (mouseY - glowY) * 0.15;
+                glow.style.transform = `translate(${glowX}px, ${glowY}px) translate(-50%, -50%)`;
+                requestAnimationFrame(updateGlow);
+            }
+
+            // set initial position
+            window.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                if (!isMoving) {
+                    isMoving = true;
+                    glow.style.opacity = '0.85';   // show on move
+                }
+            });
+
+            // fade out if mouse leaves window
+            document.addEventListener('mouseleave', () => {
+                glow.style.opacity = '0';
+                isMoving = false;
+            });
+
+            document.addEventListener('mouseenter', (e) => {
+                // show only if moving? we'll set position and show later on move
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                if (e.movementX !== undefined && (e.movementX !== 0 || e.movementY !== 0)) {
+                    glow.style.opacity = '0.85';
+                    isMoving = true;
+                }
+            });
+
+            // click burst effect
+            document.addEventListener('mousedown', (e) => {
+                glow.classList.add('click-burst');
+                // also make it white intense
+                glow.style.background = 'radial-gradient(circle, #fff 0%, #a0d0ff 60%, transparent 90%)';
+                // update position to click point (faster response)
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                glowX = e.clientX;
+                glowY = e.clientY;
+                glow.style.transform = `translate(${glowX}px, ${glowY}px) translate(-50%, -50%) scale(3.5)`;
+                glow.style.opacity = '1';
+            });
+
+            document.addEventListener('mouseup', (e) => {
+                setTimeout(() => {
+                    glow.classList.remove('click-burst');
+                    glow.style.background = 'radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(100,180,255,0.5) 40%, transparent 80%)';
+                    glow.style.transform = `translate(${glowX}px, ${glowY}px) translate(-50%, -50%) scale(1)`;
+                    // reset opacity based on movement
+                    if (isMoving) glow.style.opacity = '0.85';
+                }, 70);
+            });
+
+            // start animation loop
+            requestAnimationFrame(updateGlow);
+
+            // initialize glow position a bit off so it doesn't appear at 0,0 before first move
+            glowX = window.innerWidth / 2;
+            glowY = window.innerHeight / 2;
+            glow.style.opacity = '0'; // hidden until mouse moves
+
+            // ---------- GAME ID LOGIC ----------
+            const input = document.getElementById('gameIdInput');
+            const resultArea = document.getElementById('resultArea');
+            
+            // The fixed Discord channel base URL (we use the given channel)
+            const DISCORD_CHANNEL_URL = 'https://discord.com/channels/1051442210958217226/1531523080848150670';
+            
+            // Simulated message database (we use the ID as key, and gofile link as value)
+            // In a real scenario this would be fetched from Discord, but for demo we mock.
+            // We include some example IDs including the one in the prompt: "ID 551" -> we map 551 to a gofile link.
+            const mockMessages = {
+                '551': 'https://gofile.io/d/ABC123',   // example link
+                '123': 'https://gofile.io/d/XYZ789',
+                '777': 'https://gofile.io/d/GAME77',
+                '42':  'https://gofile.io/d/HITCH42',
+                '2024': 'https://gofile.io/d/YEAR2024'
+            };
+
+            // We also support the string "ID 551" or "551" or "id 551" etc.
+            function extractId(rawInput) {
+                const trimmed = rawInput.trim();
+                // Match "ID 551" or "id 551" or just "551"
+                const match = trimmed.match(/(?:ID\s*)?(\d+)/i);
+                if (match) return match[1];
+                return null; // no ID found
+            }
+
+            // Show error with shake
+            function showError(message) {
+                resultArea.innerHTML = '';
+                const errorEl = document.createElement('div');
+                errorEl.className = 'error-message';
+                errorEl.textContent = message;
+                resultArea.appendChild(errorEl);
+
+                // shake effect on container or input? we shake the input wrapper
+                const inputWrapper = document.querySelector('.input-wrapper');
+                inputWrapper.classList.add('shake');
+                // also shake result area? we add to input wrapper mainly
+                setTimeout(() => {
+                    inputWrapper.classList.remove('shake');
+                }, 400);
+
+                // also small shake on the error message itself
+                errorEl.classList.add('shake');
+                setTimeout(() => {
+                    errorEl.classList.remove('shake');
+                }, 400);
+            }
+
+            // Show gofile link button
+            function showGofileLink(link) {
+                resultArea.innerHTML = '';
+                const anchor = document.createElement('a');
+                anchor.href = link;
+                anchor.className = 'gofile-link';
+                anchor.target = '_blank';
+                anchor.rel = 'noopener noreferrer';
+                // Display the actual link text (shortened if too long)
+                let displayText = link;
+                if (displayText.length > 45) {
+                    displayText = displayText.slice(0, 25) + '…' + displayText.slice(-15);
+                }
+                anchor.textContent = '📁 ' + displayText + '  ↗';
+                anchor.setAttribute('aria-label', 'Open gofile link');
+                resultArea.appendChild(anchor);
+            }
+
+            // Clear result area
+            function clearResult() {
+                resultArea.innerHTML = '';
+            }
+
+            // Main search handler
+            function handleSearch() {
+                const rawValue = input.value;
+                const gameId = extractId(rawValue);
+                
+                if (!gameId) {
+                    // If nothing typed or no number — show error? but empty input should clear
+                    if (rawValue.trim() === '') {
+                        clearResult();
+                    } else {
+                        // no valid number -> error
+                        showError('error couldn\'t find a game with that ID');
+                    }
+                    return;
+                }
+
+                // Check if the ID exists in our mock database
+                const gofileLink = mockMessages[gameId];
+
+                if (gofileLink) {
+                    // Success -> show link (4th message under the input conceptually)
+                    showGofileLink(gofileLink);
+                } else {
+                    // Not found -> shake & error message
+                    showError('error couldn\'t find a game with that ID');
+                }
+            }
+
+            // Debounce for typing (to avoid instant errors while typing)
+            let debounceTimer;
+            input.addEventListener('input', function(e) {
+                // clear previous timer
+                clearTimeout(debounceTimer);
+                // if input is empty, immediately clear result
+                if (input.value.trim() === '') {
+                    clearResult();
+                    return;
+                }
+                // wait a short moment after user stops typing
+                debounceTimer = setTimeout(() => {
+                    handleSearch();
+                }, 350);
+            });
+
+            // Also handle Enter key (immediate search)
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    // cancel debounce and search now
+                    clearTimeout(debounceTimer);
+                    // if input empty, clear
+                    if (input.value.trim() === '') {
+                        clearResult();
+                    } else {
+                        handleSearch();
+                    }
+                }
+            });
+
+            // On blur, maybe keep result. Not needed.
+            // Ensure input placeholder matches: "TYPE game ID here"
+            // already in HTML
+
+            // small hint: clicking outside doesn't clear, fine.
+
+            // For demo, set an initial example? leave empty
+            // Ensure if user types "ID 551" it finds.
+            // Also test case: "id 551" -> extract works
+
+            // Edge: input value "551" -> finds. 
+            // Also we want to allow ID with spaces "  ID 551  " works.
+
+            // If user types something like "551 blah" -> regex will capture 551 first.
+
+            // Additional: If they type "ID" without number -> error.
+            // Good.
+
+        })();
+    </script>
+</body>
+</html>
+```
