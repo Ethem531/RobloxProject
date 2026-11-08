@@ -248,28 +248,24 @@ form.addEventListener("submit", async (event) => {
 
         const data = await response.json();
 
-        const messages = Array.isArray(data)
-            ? data
-            : data.messages;
-
-        if (!Array.isArray(messages)) {
-            throw new Error("messages.json must contain a messages array.");
+        if (!Array.isArray(data)) {
+            throw new Error("results.json must contain an array.");
         }
 
-        // Find exact game ID message
-        const targetIndex = messages.findIndex(message => {
-            const content = String(
-                message.content ?? message.message ?? ""
-            ).trim();
+        // Find the ID in our results
+        const foundResult = data.find(item => String(item.game_id) === id);
 
-            return content === id;
-        });
-
-        if (targetIndex === -1) {
-            statusText.textContent =
-                `No exact message found for ID ${id}.`;
+        if (!foundResult) {
+            statusText.textContent = `No exact message found for ID ${id}.`;
             return;
         }
+
+        if (foundResult.error) {
+            statusText.textContent = `Found ID ${id}, but: ${foundResult.error}`;
+            return;
+        }
+
+        const foundUrl = foundResult.gofile_url;
 
         // Search messages after the ID for a Gofile link
         const gofilePattern =
