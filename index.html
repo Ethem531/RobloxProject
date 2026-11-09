@@ -237,71 +237,26 @@ form.addEventListener("submit", async (event) => {
 
     statusText.textContent = "Searching...";
 
+    // PASTE YOUR TUNNEL URL HERE
+    const TUNNEL_URL = "https://a1b2c3d4e5f6.lhr.life"; 
+
+    statusText.textContent = "Searching Discord...";
+    
     try {
-        const response = await fetch("./results.json", {
-            cache: "no-store"
-        });
-
-        if (!response.ok) {
-            throw new Error("Could not load messages.json");
-        }
-
+        const response = await fetch(`${TUNNEL_URL}/lookup?id=${id}`);
         const data = await response.json();
 
-        if (!Array.isArray(data)) {
-            throw new Error("results.json must contain an array.");
-        }
-
-        // Find the ID in our results
-        const foundResult = data.find(item => String(item.game_id) === id);
-
-        if (!foundResult) {
-            statusText.textContent = `No exact message found for ID ${id}.`;
+        if (!response.ok) {
+            statusText.textContent = data.error || `No record found for ID ${id}.`;
             return;
         }
 
-        if (foundResult.error) {
-            statusText.textContent = `Found ID ${id}, but: ${foundResult.error}`;
-            return;
-        }
-
-        const foundUrl = foundResult.gofile_url;
-
-        // Search messages after the ID for a Gofile link
-        const gofilePattern =
-            /https?:\/\/gofile\.io\/d\/[A-Za-z0-9]+/i;
-
-        let foundUrl = null;
-
-        for (let i = targetIndex + 1; i < messages.length; i++) {
-            const content = String(
-                messages[i].content ?? messages[i].message ?? ""
-            );
-
-            const match = content.match(gofilePattern);
-
-            if (match) {
-                foundUrl = match[0];
-                break;
-            }
-        }
-
-        if (!foundUrl) {
-            statusText.textContent =
-                `Found ID ${id}, but no Gofile link appears after it.`;
-            return;
-        }
-
-        statusText.textContent =
-            `Found a Gofile link for game ID ${id}.`;
-
-        openLink.href = foundUrl;
+        statusText.textContent = `Found a Gofile link for game ID ${id}.`;
+        openLink.href = data.gofile_url;
         openLink.style.display = "block";
-
+        
     } catch (error) {
-        statusText.textContent =
-            error.message +
-            " Make sure both files are uploaded to the same folder.";
+        statusText.textContent = "Error connecting to the search server. Is the tunnel running?";
     }
 });
 
