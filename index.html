@@ -184,7 +184,7 @@ button:hover {
     <h1>Game Lookup</h1>
 
     <p class="subtitle">
-        Enter a game ID to find its matching Gofile link.
+        Searching for game and getting the file...
     </p>
 
     <form id="lookupForm">
@@ -208,7 +208,7 @@ button:hover {
             target="_blank"
             rel="noopener noreferrer"
         >
-            <button type="button">Open Gofile link</button>
+            <button type="button">Open link</button>
         </a>
     </section>
 
@@ -231,7 +231,7 @@ form.addEventListener("submit", async (event) => {
     openLink.style.display = "none";
 
     if (!/^\d+$/.test(id)) {
-        statusText.textContent = "Please enter a numeric game ID.";
+        statusText.textContent = "Please enter a game ID";
         return;
     }
 
@@ -240,7 +240,7 @@ form.addEventListener("submit", async (event) => {
     // PASTE YOUR TUNNEL URL HERE
     const TUNNEL_URL = "https://copier.edgar69-help.workers.dev"; 
 
-    statusText.textContent = "Searching Discord...";
+    statusText.textContent = "Searching for game...";
     
     try {
         const response = await fetch(`${TUNNEL_URL}/lookup?id=${id}`);
@@ -251,7 +251,7 @@ form.addEventListener("submit", async (event) => {
             return;
         }
 
-        statusText.textContent = `Found a Gofile link for game ID ${id}.`;
+        statusText.textContent = `File successfully send, game ID ${id}.`;
         openLink.href = data.gofile_url;
         openLink.style.display = "block";
         
