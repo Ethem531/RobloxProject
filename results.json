@@ -1,5 +1,11 @@
 [
     {
+        "game_id": "7721370704",
+        "error": "No Gofile link found 4 messages after the ID",
+        "sent_by": "blitzkrieg052027",
+        "status": "not_found"
+    },
+    {
         "game_id": "9082204972",
         "gofile_url": "https://gofile.io/d/r25fgcKQ",
         "sent_by": "blitzkrieg052027",
