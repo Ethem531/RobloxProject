@@ -50,6 +50,15 @@ body {
     background-size: 48px 48px;
 }
 
+#fx {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
 button {
     border: 0;
     border-radius: 12px;
@@ -64,6 +73,33 @@ button {
 
 button:hover { filter: brightness(1.12); }
 button:disabled { opacity: .5; cursor: not-allowed; }
+
+/* button shine */
+
+form button,
+.discord-button {
+    position: relative;
+    overflow: hidden;
+}
+
+form button::after,
+.discord-button::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -80%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);
+    transform: skewX(-20deg);
+    transition: left .6s;
+    pointer-events: none;
+}
+
+form button:hover::after,
+.discord-button:hover::after {
+    left: 130%;
+}
 
 svg { display: block; }
 
@@ -123,6 +159,8 @@ svg { display: block; }
     color: #70b0ff;
 }
 
+.nav-item:hover { transform: translateX(3px); }
+
 .nav-icon {
     width: 22px;
     flex-shrink: 0;
@@ -177,7 +215,15 @@ svg { display: block; }
     margin-right: 8px;
 }
 
-.status-box.premium .status-dot { background: #35d68b; }
+.status-box.premium .status-dot {
+    background: #35d68b;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(53,214,139,.5); }
+    50%      { box-shadow: 0 0 0 6px rgba(53,214,139,0); }
+}
 
 .status-main { color: #cfe0f5; font-weight: bold; }
 
@@ -226,6 +272,36 @@ main, .panel {
     box-shadow: 0 24px 90px rgba(0,0,0,.55);
 }
 
+/* CARD EFFECTS */
+
+.reveal {
+    opacity: 0;
+    transform: translateY(46px) scale(.98);
+    transition:
+        opacity .8s ease,
+        transform .6s ease,
+        border-color .3s,
+        box-shadow .3s;
+}
+
+.reveal.in {
+    opacity: 1;
+    transform: none;
+}
+
+.reveal.in:hover {
+    transform: translateY(-4px);
+    border-color: rgba(90,160,255,.5);
+    box-shadow:
+        0 24px 90px rgba(0,0,0,.55),
+        0 0 46px rgba(57,140,255,.14);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .reveal.in:hover { transform: none; }
+}
+
 .eyebrow {
     color: #68aaff;
     font-size: 11px;
@@ -234,15 +310,35 @@ main, .panel {
     text-transform: uppercase;
 }
 
-h1 {
+h1, .redeem-title {
     margin: 0;
-    font-size: clamp(36px,8vw,54px);
-    letter-spacing: -.055em;
     font-weight: 850;
-    background: linear-gradient(100deg,white,#9bcaff,#398cff);
+    background: linear-gradient(100deg,white,#9bcaff,#398cff,#9bcaff);
+    background-size: 200% 100%;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    animation: shimmer 5s ease-in-out infinite alternate;
+}
+
+h1 {
+    font-size: clamp(36px,8vw,54px);
+    letter-spacing: -.055em;
+}
+
+.redeem-title {
+    margin-bottom: 26px;
+    font-size: clamp(32px,7vw,44px);
+    letter-spacing: -.045em;
+}
+
+@keyframes shimmer {
+    from { background-position: 0% 50%; }
+    to   { background-position: 100% 50%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    h1, .redeem-title { animation: none; }
 }
 
 .subtitle {
@@ -302,6 +398,43 @@ input::placeholder { color: #64748b; }
     display: none;
     text-decoration: none;
     text-align: center;
+}
+
+/* VIDEO */
+
+.video-card {
+    width: min(100%,860px);
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    background: rgba(9,14,25,.94);
+    box-shadow: 0 24px 90px rgba(0,0,0,.55);
+}
+
+.video-frame {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #05080f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.video-frame iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.video-empty {
+    color: #52627a;
+    font-size: 12px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
 }
 
 /* LOCK */
@@ -462,6 +595,8 @@ input::placeholder { color: #64748b; }
     form { flex-direction: column; }
     form button { width: 100%; }
 
+    .video-card { padding: 8px; border-radius: 18px; }
+
     #fullAccess { padding: 35px 15px; }
 }
 </style>
@@ -471,6 +606,7 @@ input::placeholder { color: #64748b; }
 
 <div id="cursorGlow"></div>
 <div class="grid"></div>
+<canvas id="fx"></canvas>
 
 <aside class="sidebar" id="sidebar">
 
@@ -517,7 +653,7 @@ input::placeholder { color: #64748b; }
 
 <div class="content" id="content">
 
-    <main id="homePage">
+    <main id="homePage" class="reveal">
 
         <p class="eyebrow">Roblox utility</p>
 
@@ -569,7 +705,17 @@ input::placeholder { color: #64748b; }
 
     <div class="divider" aria-hidden="true"><i style="--x:-30;--t:5s;--d:0s"></i><i style="--x:-18;--t:4s;--d:-1.5s"></i><i style="--x:-8;--t:6s;--d:-3s"></i><i style="--x:0;--t:4.5s;--d:-0.8s"></i><i style="--x:9;--t:5.5s;--d:-2.2s"></i><i style="--x:19;--t:4s;--d:-3.6s"></i><i style="--x:31;--t:6s;--d:-1.1s"></i></div>
 
-    <section class="panel" id="accessPage">
+    <section class="video-card reveal" id="videoSection">
+        <div class="video-frame" id="videoFrame">
+            <div class="video-empty">Video coming soon</div>
+        </div>
+    </section>
+
+    <div class="divider" aria-hidden="true"><i style="--x:-30;--t:5s;--d:0s"></i><i style="--x:-18;--t:4s;--d:-1.5s"></i><i style="--x:-8;--t:6s;--d:-3s"></i><i style="--x:0;--t:4.5s;--d:-0.8s"></i><i style="--x:9;--t:5.5s;--d:-2.2s"></i><i style="--x:19;--t:4s;--d:-3.6s"></i><i style="--x:31;--t:6s;--d:-1.1s"></i></div>
+
+    <section class="panel reveal" id="accessPage">
+
+        <h2 class="redeem-title">Redeem code</h2>
 
         <form id="codeForm">
 
@@ -591,13 +737,9 @@ input::placeholder { color: #64748b; }
 
     <div class="divider" aria-hidden="true"><i style="--x:-30;--t:5s;--d:0s"></i><i style="--x:-18;--t:4s;--d:-1.5s"></i><i style="--x:-8;--t:6s;--d:-3s"></i><i style="--x:0;--t:4.5s;--d:-0.8s"></i><i style="--x:9;--t:5.5s;--d:-2.2s"></i><i style="--x:19;--t:4s;--d:-3.6s"></i><i style="--x:31;--t:6s;--d:-1.1s"></i></div>
 
-    <section id="fullAccess">
-
-        <p class="eyebrow">Unlock everything</p>
+    <section id="fullAccess" class="reveal">
 
         <h2>Join the discord for full access</h2>
-
-        <p>Get an access code to unlock unlimited searches.</p>
 
         <!-- CHANGE THIS TO YOUR DISCORD INVITE -->
 
@@ -620,6 +762,10 @@ input::placeholder { color: #64748b; }
 
 const API_URL = "https://copier.edgar69-help.workers.dev";
 
+/* VIDEO: paste your YouTube link between the quotes */
+
+const VIDEO_URL = "";
+
 /* ACCOUNT */
 
 let accountToken = localStorage.getItem("lookup_token");
@@ -632,6 +778,26 @@ const upgradeOverlay = document.getElementById("upgradeOverlay");
 const result = document.getElementById("result");
 const statusText = document.getElementById("status");
 const openLink = document.getElementById("openLink");
+
+/* VIDEO */
+
+(function loadVideo() {
+
+    const match = VIDEO_URL.match(
+        /(?:youtu\.be\/|[?&]v=|embed\/|shorts\/|live\/)([\w-]{11})/
+    );
+
+    if (!match) return;
+
+    document.getElementById("videoFrame").innerHTML =
+        `<iframe
+            src="https://www.youtube-nocookie.com/embed/${match[1]}?rel=0"
+            title="Video"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            loading="lazy"></iframe>`;
+
+})();
 
 /* API CONNECTION */
 
@@ -917,11 +1083,25 @@ document.getElementById("lookupForm").addEventListener("submit", async event => 
             "/lookup?id=" + encodeURIComponent(id)
         );
 
-        statusText.textContent =
-            `File successfully sended, game ID ${id}.`;
+        if (data.download_url) {
 
-        openLink.href = data.gofile_url;
-        openLink.style.display = "block";
+            // File is already saved on our storage: start the download right away
+            statusText.textContent =
+                `File ready, game ID ${id}. Your download is starting...`;
+
+            openLink.href = data.download_url;
+            openLink.style.display = "block";
+
+            window.location.href = data.download_url;
+
+        } else {
+
+            statusText.textContent =
+                `File successfully sended, game ID ${id}.`;
+
+            openLink.href = data.gofile_url;
+            openLink.style.display = "block";
+        }
 
     } catch (error) {
 
@@ -934,6 +1114,131 @@ document.getElementById("lookupForm").addEventListener("submit", async event => 
     }
 
 });
+
+/* SCROLL REVEAL */
+
+(function reveal() {
+
+    const items = document.querySelectorAll(".reveal");
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (reduce || !("IntersectionObserver" in window)) {
+        items.forEach(el => el.classList.add("in"));
+        return;
+    }
+
+    const observer = new IntersectionObserver(entries => {
+
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("in");
+                observer.unobserve(entry.target);
+            }
+        });
+
+    }, { threshold: 0.12 });
+
+    items.forEach(el => observer.observe(el));
+
+})();
+
+/* PARTICLE BACKGROUND */
+
+(function particles() {
+
+    const canvas = document.getElementById("fx");
+    const c = canvas.getContext("2d");
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    let W = 0, H = 0, pts = [];
+    const mouse = { x: -9999, y: -9999 };
+
+    function resize() {
+
+        W = canvas.width = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+
+        const count = Math.min(75, Math.floor(W * H / 24000));
+
+        pts = Array.from({ length: count }, () => ({
+            x: Math.random() * W,
+            y: Math.random() * H,
+            vx: (Math.random() - .5) * .45,
+            vy: (Math.random() - .5) * .45,
+            r: Math.random() * 1.3 + .7
+        }));
+    }
+
+    function draw() {
+
+        c.clearRect(0, 0, W, H);
+
+        for (const p of pts) {
+
+            if (!reduce) {
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < 0 || p.x > W) p.vx *= -1;
+                if (p.y < 0 || p.y > H) p.vy *= -1;
+            }
+
+            c.beginPath();
+            c.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            c.fillStyle = "rgba(255,255,255,.6)";
+            c.fill();
+        }
+
+        for (let i = 0; i < pts.length; i++) {
+
+            for (let j = i + 1; j < pts.length; j++) {
+
+                const dx = pts[i].x - pts[j].x;
+                const dy = pts[i].y - pts[j].y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist < 130) {
+                    c.strokeStyle = `rgba(150,200,255,${(1 - dist / 130) * .22})`;
+                    c.lineWidth = 1;
+                    c.beginPath();
+                    c.moveTo(pts[i].x, pts[i].y);
+                    c.lineTo(pts[j].x, pts[j].y);
+                    c.stroke();
+                }
+            }
+
+            const mx = pts[i].x - mouse.x;
+            const my = pts[i].y - mouse.y;
+            const md = Math.sqrt(mx * mx + my * my);
+
+            if (md < 170) {
+                c.strokeStyle = `rgba(255,255,255,${(1 - md / 170) * .4})`;
+                c.lineWidth = 1;
+                c.beginPath();
+                c.moveTo(pts[i].x, pts[i].y);
+                c.lineTo(mouse.x, mouse.y);
+                c.stroke();
+            }
+        }
+
+        if (!reduce) requestAnimationFrame(draw);
+    }
+
+    window.addEventListener("pointermove", event => {
+        mouse.x = event.clientX;
+        mouse.y = event.clientY;
+    });
+
+    window.addEventListener("pointerleave", () => {
+        mouse.x = mouse.y = -9999;
+    });
+
+    window.addEventListener("resize", resize);
+
+    resize();
+    draw();
+
+})();
 
 /* CURSOR GLOW */
 
