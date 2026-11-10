@@ -74,7 +74,6 @@ button {
 button:hover { filter: brightness(1.12); }
 button:disabled { opacity: .5; cursor: not-allowed; }
 
-/* button shine */
 form button, .discord-button {
     position: relative;
     overflow: hidden;
@@ -99,7 +98,6 @@ form button:hover::after, .discord-button:hover::after {
 
 svg { display: block; }
 
-/* SIDEBAR */
 .sidebar {
     position: fixed;
     z-index: 10;
@@ -226,7 +224,6 @@ svg { display: block; }
 .sidebar.collapsed .status-box { text-align: center; }
 .sidebar.collapsed .status-dot { margin: 0; }
 
-/* CONTENT */
 .content {
     position: relative;
     z-index: 1;
@@ -354,7 +351,6 @@ input::placeholder { color: #64748b; }
     text-align: center;
 }
 
-/* DIVIDER */
 .divider {
     position: relative;
     flex-shrink: 0;
@@ -384,7 +380,6 @@ input::placeholder { color: #64748b; }
     100% { transform: translateY(220px); opacity: 0; }
 }
 
-/* DISCORD SECTION */
 #fullAccess {
     width: min(92vw,560px);
     margin: 0 0 50px;
@@ -495,7 +490,7 @@ input::placeholder { color: #64748b; }
         <section id="result" aria-live="polite">
             <p id="status"></p>
             <a id="openLink" href="#" target="_blank" rel="noopener noreferrer">
-                <button type="button">Click here to download</button>
+                <button type="button">Click here if download doesn't start</button>
             </a>
         </section>
 
