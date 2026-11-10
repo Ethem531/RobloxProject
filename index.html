@@ -75,15 +75,12 @@ button:hover { filter: brightness(1.12); }
 button:disabled { opacity: .5; cursor: not-allowed; }
 
 /* button shine */
-
-form button,
-.discord-button {
+form button, .discord-button {
     position: relative;
     overflow: hidden;
 }
 
-form button::after,
-.discord-button::after {
+form button::after, .discord-button::after {
     content: "";
     position: absolute;
     top: 0;
@@ -96,15 +93,13 @@ form button::after,
     pointer-events: none;
 }
 
-form button:hover::after,
-.discord-button:hover::after {
+form button:hover::after, .discord-button:hover::after {
     left: 130%;
 }
 
 svg { display: block; }
 
 /* SIDEBAR */
-
 .sidebar {
     position: fixed;
     z-index: 10;
@@ -152,8 +147,7 @@ svg { display: block; }
     white-space: nowrap;
 }
 
-.nav-item:hover,
-.nav-item.active {
+.nav-item:hover, .nav-item.active {
     background: rgba(57,140,255,.11);
     border-color: rgba(57,140,255,.2);
     color: #70b0ff;
@@ -211,12 +205,8 @@ svg { display: block; }
     width: 9px;
     height: 9px;
     border-radius: 50%;
-    background: #64748b;
-    margin-right: 8px;
-}
-
-.status-box.premium .status-dot {
     background: #35d68b;
+    margin-right: 8px;
     animation: pulse 2s ease-in-out infinite;
 }
 
@@ -227,18 +217,9 @@ svg { display: block; }
 
 .status-main { color: #cfe0f5; font-weight: bold; }
 
-.status-days {
-    display: none;
-    margin-top: 8px;
-    color: #42dc9c;
-}
-
-.status-box.premium .status-days { display: block; }
-
 .sidebar.collapsed .brand,
 .sidebar.collapsed .nav-text,
-.sidebar.collapsed .status-text,
-.sidebar.collapsed .status-days {
+.sidebar.collapsed .status-text {
     display: none;
 }
 
@@ -246,7 +227,6 @@ svg { display: block; }
 .sidebar.collapsed .status-dot { margin: 0; }
 
 /* CONTENT */
-
 .content {
     position: relative;
     z-index: 1;
@@ -272,16 +252,10 @@ main, .panel {
     box-shadow: 0 24px 90px rgba(0,0,0,.55);
 }
 
-/* CARD EFFECTS */
-
 .reveal {
     opacity: 0;
     transform: translateY(46px) scale(.98);
-    transition:
-        opacity .8s ease,
-        transform .6s ease,
-        border-color .3s,
-        box-shadow .3s;
+    transition: opacity .8s ease, transform .6s ease, border-color .3s, box-shadow .3s;
 }
 
 .reveal.in {
@@ -292,14 +266,7 @@ main, .panel {
 .reveal.in:hover {
     transform: translateY(-4px);
     border-color: rgba(90,160,255,.5);
-    box-shadow:
-        0 24px 90px rgba(0,0,0,.55),
-        0 0 46px rgba(57,140,255,.14);
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .reveal { opacity: 1; transform: none; transition: none; }
-    .reveal.in:hover { transform: none; }
+    box-shadow: 0 24px 90px rgba(0,0,0,.55), 0 0 46px rgba(57,140,255,.14);
 }
 
 .eyebrow {
@@ -310,7 +277,7 @@ main, .panel {
     text-transform: uppercase;
 }
 
-h1, .redeem-title {
+h1 {
     margin: 0;
     font-weight: 850;
     background: linear-gradient(100deg,white,#9bcaff,#398cff,#9bcaff);
@@ -319,26 +286,13 @@ h1, .redeem-title {
     background-clip: text;
     color: transparent;
     animation: shimmer 5s ease-in-out infinite alternate;
-}
-
-h1 {
     font-size: clamp(36px,8vw,54px);
     letter-spacing: -.055em;
-}
-
-.redeem-title {
-    margin-bottom: 26px;
-    font-size: clamp(32px,7vw,44px);
-    letter-spacing: -.045em;
 }
 
 @keyframes shimmer {
     from { background-position: 0% 50%; }
     to   { background-position: 100% 50%; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    h1, .redeem-title { animation: none; }
 }
 
 .subtitle {
@@ -400,80 +354,7 @@ input::placeholder { color: #64748b; }
     text-align: center;
 }
 
-/* VIDEO */
-
-.video-card {
-    width: min(100%,860px);
-    padding: 14px;
-    border: 1px solid var(--border);
-    border-radius: 24px;
-    background: rgba(9,14,25,.94);
-    box-shadow: 0 24px 90px rgba(0,0,0,.55);
-}
-
-.video-frame {
-    position: relative;
-    aspect-ratio: 16 / 9;
-    border-radius: 14px;
-    overflow: hidden;
-    background: #05080f;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.video-frame iframe {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
-}
-
-.video-empty {
-    color: #52627a;
-    font-size: 12px;
-    letter-spacing: .2em;
-    text-transform: uppercase;
-}
-
-/* LOCK */
-
-.locked-input {
-    position: relative;
-    flex: 1;
-    min-width: 0;
-}
-
-.locked-input input { width: 100%; }
-
-.upgrade-overlay {
-    display: none;
-    position: absolute;
-    inset: 0;
-    border-radius: 12px;
-    background: rgba(5,10,20,.96);
-    align-items: center;
-    justify-content: center;
-    color: #70b0ff;
-    font-size: 13px;
-    font-weight: bold;
-    cursor: pointer;
-    border: 1px solid #29466c;
-}
-
-.upgrade-overlay.visible { display: flex; }
-
-.usage-text {
-    color: #64748b;
-    font-size: 11px;
-    margin-top: 12px;
-}
-
-.usage-text:empty { display: none; }
-
 /* DIVIDER */
-
 .divider {
     position: relative;
     flex-shrink: 0;
@@ -503,22 +384,7 @@ input::placeholder { color: #64748b; }
     100% { transform: translateY(220px); opacity: 0; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .divider i { animation: none; }
-}
-
-/* ACCESS PAGE */
-
-#codeStatus {
-    font-size: 13px;
-    margin: 16px 0 0;
-    color: #9aabc1;
-}
-
-#codeStatus:empty { display: none; }
-
 /* DISCORD SECTION */
-
 #fullAccess {
     width: min(92vw,560px);
     margin: 0 0 50px;
@@ -562,41 +428,14 @@ input::placeholder { color: #64748b; }
 
 @media(max-width:650px) {
     .toggle { display: none; }
-
-    .sidebar {
-        width: 76px;
-        padding: 18px 9px;
-    }
-
-    .sidebar .brand,
-    .sidebar .nav-text,
-    .sidebar .status-text,
-    .sidebar .status-days {
-        display: none;
-    }
-
-    .sidebar .status-box {
-        left: 7px;
-        right: 7px;
-        padding: 9px 3px;
-        text-align: center;
-    }
-
+    .sidebar { width: 76px; padding: 18px 9px; }
+    .sidebar .brand, .sidebar .nav-text, .sidebar .status-text { display: none; }
+    .sidebar .status-box { left: 7px; right: 7px; padding: 9px 3px; text-align: center; }
     .sidebar .status-dot { margin: 0; }
-
-    .content,
-    .content.expanded {
-        margin-left: 76px;
-        padding: 40px 10px 20px;
-    }
-
+    .content, .content.expanded { margin-left: 76px; padding: 40px 10px 20px; }
     main, .panel { padding: 35px 20px; }
-
     form { flex-direction: column; }
     form button { width: 100%; }
-
-    .video-card { padding: 8px; border-radius: 18px; }
-
     #fullAccess { padding: 35px 15px; }
 }
 </style>
@@ -609,42 +448,23 @@ input::placeholder { color: #64748b; }
 <canvas id="fx"></canvas>
 
 <aside class="sidebar" id="sidebar">
-
     <div class="sidebar-header">
         <div class="brand">GAME LOOKUP</div>
     </div>
 
     <nav class="nav">
-
         <button class="nav-item active" data-target="home">
             <span class="nav-icon">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 11l9-8 9 8v10h-6v-6H9v6H3z"/></svg>
             </span>
             <span class="nav-text">Home</span>
         </button>
-
-        <button class="nav-item" data-target="access">
-            <span class="nav-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3"/></svg>
-            </span>
-            <span class="nav-text">Access Code</span>
-        </button>
-
-        <button class="nav-item" data-target="upgrade">
-            <span class="nav-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"/></svg>
-            </span>
-            <span class="nav-text">Get Full Access</span>
-        </button>
-
     </nav>
 
     <div class="status-box" id="statusBox">
         <span class="status-dot"></span>
-        <span class="status-text">Status: <span class="status-main" id="accountStatus">Loading...</span></span>
-        <div class="status-days" id="accountDays"></div>
+        <span class="status-text">Status: <span class="status-main" id="accountStatus">Online</span></span>
     </div>
-
 </aside>
 
 <button class="toggle" id="toggleSidebar" aria-label="Collapse or expand sidebar">
@@ -653,487 +473,128 @@ input::placeholder { color: #64748b; }
 
 <div class="content" id="content">
 
-    <main id="homePage" class="reveal">
-
+    <main id="homePage" class="reveal in">
         <p class="eyebrow">Roblox utility</p>
-
         <h1>Game Lookup</h1>
-
         <p class="subtitle">
             Searching for game and getting the file...
         </p>
 
         <form id="lookupForm">
-
-            <div class="locked-input">
-
-                <input
-                    id="gameId"
-                    type="text"
-                    inputmode="numeric"
-                    autocomplete="off"
-                    placeholder="Enter Roblox game ID"
-                    required
-                >
-
-                <div class="upgrade-overlay" id="upgradeOverlay">
-                    Upgrade
-                </div>
-
-            </div>
-
+            <input
+                id="gameId"
+                type="text"
+                inputmode="numeric"
+                autocomplete="off"
+                placeholder="Enter Roblox game ID"
+                required
+            >
             <button type="submit" id="searchButton">Search</button>
-
         </form>
-
-        <div class="usage-text" id="usageText"></div>
 
         <section id="result" aria-live="polite">
             <p id="status"></p>
-
-            <a id="openLink"
-               href="#"
-               target="_blank"
-               rel="noopener noreferrer">
-                <button type="button">Open link</button>
+            <a id="openLink" href="#" target="_blank" rel="noopener noreferrer">
+                <button type="button">Click here to download</button>
             </a>
         </section>
 
         <p class="hint">Press Enter to search</p>
-
     </main>
 
     <div class="divider" aria-hidden="true"><i style="--x:-30;--t:5s;--d:0s"></i><i style="--x:-18;--t:4s;--d:-1.5s"></i><i style="--x:-8;--t:6s;--d:-3s"></i><i style="--x:0;--t:4.5s;--d:-0.8s"></i><i style="--x:9;--t:5.5s;--d:-2.2s"></i><i style="--x:19;--t:4s;--d:-3.6s"></i><i style="--x:31;--t:6s;--d:-1.1s"></i></div>
 
-    <section class="video-card reveal" id="videoSection">
-        <div class="video-frame" id="videoFrame">
-            <div class="video-empty">Video coming soon</div>
-        </div>
-    </section>
-
-    <div class="divider" aria-hidden="true"><i style="--x:-30;--t:5s;--d:0s"></i><i style="--x:-18;--t:4s;--d:-1.5s"></i><i style="--x:-8;--t:6s;--d:-3s"></i><i style="--x:0;--t:4.5s;--d:-0.8s"></i><i style="--x:9;--t:5.5s;--d:-2.2s"></i><i style="--x:19;--t:4s;--d:-3.6s"></i><i style="--x:31;--t:6s;--d:-1.1s"></i></div>
-
-    <section class="panel reveal" id="accessPage">
-
-        <h2 class="redeem-title">Redeem code</h2>
-
-        <form id="codeForm">
-
-            <input
-                id="accessCodeInput"
-                type="text"
-                placeholder="Enter your access code"
-                autocomplete="off"
-                required
-            >
-
-            <button type="submit" id="redeemButton">Redeem</button>
-
-        </form>
-
-        <p id="codeStatus"></p>
-
-    </section>
-
-    <div class="divider" aria-hidden="true"><i style="--x:-30;--t:5s;--d:0s"></i><i style="--x:-18;--t:4s;--d:-1.5s"></i><i style="--x:-8;--t:6s;--d:-3s"></i><i style="--x:0;--t:4.5s;--d:-0.8s"></i><i style="--x:9;--t:5.5s;--d:-2.2s"></i><i style="--x:19;--t:4s;--d:-3.6s"></i><i style="--x:31;--t:6s;--d:-1.1s"></i></div>
-
-    <section id="fullAccess" class="reveal">
-
+    <section id="fullAccess" class="reveal in">
         <h2>Join the discord for full access</h2>
-
-        <!-- CHANGE THIS TO YOUR DISCORD INVITE -->
-
-        <a class="discord-button"
-           href="https://discord.com/"
-           target="_blank"
-           rel="noopener noreferrer">
+        <a class="discord-button" href="https://discord.com/" target="_blank" rel="noopener noreferrer">
             Join Discord
         </a>
-
         <p class="type-here">TYPE HERE</p>
-
     </section>
 
 </div>
 
 <script>
-
-/* CONFIGURATION */
-
+/* =========================================
+   CONFIGURATION
+   ========================================= */
 const API_URL = "https://copier.edgar69-help.workers.dev";
-
-/* VIDEO: paste your YouTube link between the quotes */
-
-const VIDEO_URL = "";
-
-/* ACCOUNT */
-
-let accountToken = localStorage.getItem("lookup_token");
-let accountData = null;
 
 const gameInput = document.getElementById("gameId");
 const searchButton = document.getElementById("searchButton");
-const upgradeOverlay = document.getElementById("upgradeOverlay");
-
 const result = document.getElementById("result");
 const statusText = document.getElementById("status");
 const openLink = document.getElementById("openLink");
 
-/* VIDEO */
-
-(function loadVideo() {
-
-    const match = VIDEO_URL.match(
-        /(?:youtu\.be\/|[?&]v=|embed\/|shorts\/|live\/)([\w-]{11})/
-    );
-
-    if (!match) return;
-
-    document.getElementById("videoFrame").innerHTML =
-        `<iframe
-            src="https://www.youtube-nocookie.com/embed/${match[1]}?rel=0"
-            title="Video"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-            loading="lazy"></iframe>`;
-
-})();
-
-/* API CONNECTION */
-
-async function api(path, options = {}) {
-
-    const response = await fetch(API_URL + path, {
-        ...options,
-        headers: {
-            ...(accountToken
-                ? { "Authorization": "Bearer " + accountToken }
-                : {}),
-            ...(options.body
-                ? { "Content-Type": "application/json" }
-                : {}),
-            ...(options.headers || {})
-        }
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-        throw new Error(data.error || "Request failed");
-    }
-
-    return data;
-}
-
-/* ACCOUNT CREATION */
-
-async function initializeAccount() {
-
-    try {
-
-        if (!accountToken) {
-
-            const data = await api("/api/account", {
-                method: "POST"
-            });
-
-            accountToken = data.token;
-
-            localStorage.setItem("lookup_token", accountToken);
-        }
-
-        try {
-
-            accountData = await api("/api/me");
-
-        } catch (error) {
-
-            if (error.message === "Unauthorized") {
-
-                localStorage.removeItem("lookup_token");
-                accountToken = null;
-
-                const data = await api("/api/account", {
-                    method: "POST"
-                });
-
-                accountToken = data.token;
-
-                localStorage.setItem("lookup_token", accountToken);
-
-                accountData = await api("/api/me");
-
-            } else {
-                throw error;
-            }
-        }
-
-        updateInterface();
-
-    } catch (error) {
-
-        document.getElementById("accountStatus").textContent =
-            "Offline";
-
-        document.getElementById("usageText").textContent =
-            "Could not connect to the server. Refresh to retry.";
-
-        console.error(error);
-    }
-}
-
-/* ACCOUNT DISPLAY */
-
-function updateInterface() {
-    // FORCE UNLOCK - Bypass the account database entirely
-    document.getElementById("accountStatus").textContent = "Online";
-    gameInput.disabled = false;
-    searchButton.disabled = false;
-    upgradeOverlay.classList.remove("visible");
-    document.getElementById("usageText").textContent = "";
-}
-
-/* PREMIUM TIMER */
-
-function updateExpiry() {
-
-    const days = document.getElementById("accountDays");
-
-    if (!accountData || !accountData.premium) {
-        days.textContent = "";
-        return;
-    }
-
-    const remaining =
-        Math.max(0, accountData.premium_until - Date.now());
-
-    if (remaining <= 0) {
-        refreshAccount();
-        return;
-    }
-
-    const left = Math.ceil(remaining / 86400000);
-
-    days.textContent =
-        left + (left === 1 ? " day left" : " days left");
-}
-
-async function refreshAccount() {
-
-    try {
-        accountData = await api("/api/me");
-        updateInterface();
-    } catch (error) {
-        console.error(error);
-    }
-}
-
-/* NAVIGATION */
-
+/* =========================================
+   NAVIGATION & UI
+   ========================================= */
 const sidebar = document.getElementById("sidebar");
 const content = document.getElementById("content");
 
 document.getElementById("toggleSidebar").addEventListener("click", () => {
-
     sidebar.classList.toggle("collapsed");
     content.classList.toggle("expanded");
-
 });
 
-const sections = {
-    home: document.getElementById("homePage"),
-    access: document.getElementById("accessPage"),
-    upgrade: document.getElementById("fullAccess")
-};
-
-function scrollToSection(name) {
-
-    sections[name].scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-    });
-
-}
-
-document.querySelectorAll(".nav-item[data-target]").forEach(item => {
-
-    item.addEventListener("click", () => scrollToSection(item.dataset.target));
-
-});
-
-function updateActive() {
-
-    const middle = window.innerHeight / 2;
-    let current = "home";
-    let best = Infinity;
-
-    for (const name in sections) {
-
-        const rect = sections[name].getBoundingClientRect();
-        const distance = Math.abs((rect.top + rect.bottom) / 2 - middle);
-
-        if (distance < best) {
-            best = distance;
-            current = name;
-        }
-    }
-
-    if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 2) {
-        current = "upgrade";
-    }
-
-    document.querySelectorAll(".nav-item[data-target]").forEach(item => {
-        item.classList.toggle("active", item.dataset.target === current);
-    });
-
-}
-
-window.addEventListener("scroll", updateActive, { passive: true });
-window.addEventListener("resize", updateActive);
-updateActive();
-
-upgradeOverlay.addEventListener("click", () => scrollToSection("upgrade"));
-
-/* REDEEM CODE */
-
-document.getElementById("codeForm").addEventListener("submit", async event => {
-
-    event.preventDefault();
-
-    const input = document.getElementById("accessCodeInput");
-    const message = document.getElementById("codeStatus");
-    const button = document.getElementById("redeemButton");
-
-    button.disabled = true;
-    message.textContent = "Checking code...";
-    message.style.color = "#9aabc1";
-
-    try {
-
-        await api("/api/redeem", {
-            method: "POST",
-            body: JSON.stringify({
-                code: input.value.trim()
-            })
-        });
-
-        message.style.color = "#42dc9c";
-        message.textContent =
-            "Premium activated! You have 30 days of unlimited access.";
-
-        input.value = "";
-
-        await refreshAccount();
-
-    } catch (error) {
-
-        message.style.color = "#ff7777";
-        message.textContent = error.message;
-
-    } finally {
-
-        button.disabled = false;
-
-    }
-
-});
-
-/* GAME LOOKUP */
-
+/* =========================================
+   SEARCH & AUTO DOWNLOAD
+   ========================================= */
 document.getElementById("lookupForm").addEventListener("submit", async event => {
-
     event.preventDefault();
-
-    if (!accountData) return;
 
     const id = gameInput.value.trim();
-
     result.style.display = "block";
     openLink.style.display = "none";
 
     if (!/^\d+$/.test(id)) {
-
-        statusText.textContent = "Please enter a game ID.";
+        statusText.textContent = "Please enter a valid numeric game ID.";
         return;
     }
 
     searchButton.disabled = true;
-    statusText.textContent = "Searching for game...";
+    statusText.textContent = "Searching for the file, please wait...";
 
     try {
+        // Because the Cloudflare Worker streams the file directly, 
+        // we just need to redirect to the API URL to trigger the download.
+        const downloadUrl = `${API_URL}/lookup?id=${encodeURIComponent(id)}`;
+        
+        // Auto trigger download
+        window.location.href = downloadUrl;
 
-        const data = await api(
-            "/lookup?id=" + encodeURIComponent(id)
-        );
-
-        if (data.gofile_url) {
-            statusText.textContent = `Found a Gofile link for game ID ${id}.`;
-            openLink.href = data.gofile_url;
-            openLink.style.display = "block";
-            
-            // Automatically start the download
-            window.location.href = data.gofile_url; 
-        } else {
-            statusText.textContent = data.error || `No record found for ID ${id}.`;
-        }
+        // Show status update
+        statusText.textContent = `Download started for game ID ${id}. If it didn't start, click the button below.`;
+        
+        openLink.href = downloadUrl;
+        openLink.style.display = "block";
 
     } catch (error) {
-
-        statusText.textContent = error.message;
-
+        statusText.textContent = "Error connecting to the server. Try again.";
     } finally {
-
-        await refreshAccount();
-
+        searchButton.disabled = false;
     }
-
 });
 
-/* SCROLL REVEAL */
+/* =========================================
+   BACKGROUND EFFECTS (PARTICLES / CURSOR)
+   ========================================= */
+const glow = document.getElementById("cursorGlow");
+window.addEventListener("pointermove", event => {
+    glow.style.left = event.clientX + "px";
+    glow.style.top = event.clientY + "px";
+});
 
-(function reveal() {
-
-    const items = document.querySelectorAll(".reveal");
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    if (reduce || !("IntersectionObserver" in window)) {
-        items.forEach(el => el.classList.add("in"));
-        return;
-    }
-
-    const observer = new IntersectionObserver(entries => {
-
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add("in");
-                observer.unobserve(entry.target);
-            }
-        });
-
-    }, { threshold: 0.12 });
-
-    items.forEach(el => observer.observe(el));
-
-})();
-
-/* PARTICLE BACKGROUND */
-
+// Particle background
 (function particles() {
-
     const canvas = document.getElementById("fx");
     const c = canvas.getContext("2d");
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
     let W = 0, H = 0, pts = [];
-    const mouse = { x: -9999, y: -9999 };
 
     function resize() {
-
         W = canvas.width = window.innerWidth;
         H = canvas.height = window.innerHeight;
-
         const count = Math.min(75, Math.floor(W * H / 24000));
-
         pts = Array.from({ length: count }, () => ({
             x: Math.random() * W,
             y: Math.random() * H,
@@ -1144,136 +605,37 @@ document.getElementById("lookupForm").addEventListener("submit", async event => 
     }
 
     function draw() {
-
         c.clearRect(0, 0, W, H);
-
         for (const p of pts) {
-
-            if (!reduce) {
-                p.x += p.vx;
-                p.y += p.vy;
-
-                if (p.x < 0 || p.x > W) p.vx *= -1;
-                if (p.y < 0 || p.y > H) p.vy *= -1;
-            }
-
+            p.x += p.vx; p.y += p.vy;
+            if (p.x < 0 || p.x > W) p.vx *= -1;
+            if (p.y < 0 || p.y > H) p.vy *= -1;
             c.beginPath();
             c.arc(p.x, p.y, p.r, 0, Math.PI * 2);
             c.fillStyle = "rgba(255,255,255,.6)";
             c.fill();
         }
-
         for (let i = 0; i < pts.length; i++) {
-
             for (let j = i + 1; j < pts.length; j++) {
-
                 const dx = pts[i].x - pts[j].x;
                 const dy = pts[i].y - pts[j].y;
                 const dist = Math.sqrt(dx * dx + dy * dy);
-
                 if (dist < 130) {
                     c.strokeStyle = `rgba(150,200,255,${(1 - dist / 130) * .22})`;
-                    c.lineWidth = 1;
                     c.beginPath();
                     c.moveTo(pts[i].x, pts[i].y);
                     c.lineTo(pts[j].x, pts[j].y);
                     c.stroke();
                 }
             }
-
-            const mx = pts[i].x - mouse.x;
-            const my = pts[i].y - mouse.y;
-            const md = Math.sqrt(mx * mx + my * my);
-
-            if (md < 170) {
-                c.strokeStyle = `rgba(255,255,255,${(1 - md / 170) * .4})`;
-                c.lineWidth = 1;
-                c.beginPath();
-                c.moveTo(pts[i].x, pts[i].y);
-                c.lineTo(mouse.x, mouse.y);
-                c.stroke();
-            }
         }
-
-        if (!reduce) requestAnimationFrame(draw);
+        requestAnimationFrame(draw);
     }
 
-    window.addEventListener("pointermove", event => {
-        mouse.x = event.clientX;
-        mouse.y = event.clientY;
-    });
-
-    window.addEventListener("pointerleave", () => {
-        mouse.x = mouse.y = -9999;
-    });
-
     window.addEventListener("resize", resize);
-
     resize();
     draw();
-
 })();
-
-/* CURSOR GLOW */
-
-const glow = document.getElementById("cursorGlow");
-
-window.addEventListener("pointermove", event => {
-
-    glow.style.left = event.clientX + "px";
-    glow.style.top = event.clientY + "px";
-
-});
-
-/* CLICK RIPPLE */
-
-window.addEventListener("pointerdown", event => {
-
-    const ripple = document.createElement("span");
-
-    ripple.style.cssText = `
-        position:fixed;
-        left:${event.clientX}px;
-        top:${event.clientY}px;
-        width:12px;
-        height:12px;
-        border:1px solid white;
-        border-radius:50%;
-        pointer-events:none;
-        transform:translate(-50%,-50%);
-        animation:ripple .55s ease-out forwards;
-        z-index:100;
-    `;
-
-    const style = document.createElement("style");
-    style.textContent = `
-        @keyframes ripple {
-            to {
-                width:95px;
-                height:95px;
-                opacity:0;
-            }
-        }
-    `;
-
-    document.head.appendChild(style);
-    document.body.appendChild(ripple);
-
-    ripple.addEventListener("animationend", () => {
-        ripple.remove();
-        style.remove();
-    });
-
-});
-
-/* START */
-
-initializeAccount();
-
-setInterval(() => {
-    updateExpiry();
-}, 30000);
-
 </script>
 
 </body>
