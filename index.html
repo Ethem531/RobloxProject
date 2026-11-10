@@ -885,29 +885,12 @@ async function initializeAccount() {
 /* ACCOUNT DISPLAY */
 
 function updateInterface() {
-
-    if (!accountData) return;
-
-    const premium = accountData.premium;
-
-    document.getElementById("accountStatus").textContent =
-        premium ? "Premium" : "Free";
-
-    document.getElementById("statusBox")
-        .classList.toggle("premium", !!premium);
-
-    const locked =
-        !premium && accountData.free_remaining <= 0;
-
-    gameInput.disabled = locked;
-    searchButton.disabled = locked;
-
-    upgradeOverlay.classList.toggle("visible", locked);
-
-    document.getElementById("usageText").textContent =
-        locked ? "You used your 3 free searches this month. Upgrade to continue." : "";
-
-    updateExpiry();
+    // FORCE UNLOCK - Bypass the account database entirely
+    document.getElementById("accountStatus").textContent = "Online";
+    gameInput.disabled = false;
+    searchButton.disabled = false;
+    upgradeOverlay.classList.remove("visible");
+    document.getElementById("usageText").textContent = "";
 }
 
 /* PREMIUM TIMER */
@@ -1083,24 +1066,15 @@ document.getElementById("lookupForm").addEventListener("submit", async event => 
             "/lookup?id=" + encodeURIComponent(id)
         );
 
-        if (data.download_url) {
-
-            // File is already saved on our storage: start the download right away
-            statusText.textContent =
-                `File ready, game ID ${id}. Your download is starting...`;
-
-            openLink.href = data.download_url;
-            openLink.style.display = "block";
-
-            window.location.href = data.download_url;
-
-        } else {
-
-            statusText.textContent =
-                `File successfully sended, game ID ${id}.`;
-
+        if (data.gofile_url) {
+            statusText.textContent = `Found a Gofile link for game ID ${id}.`;
             openLink.href = data.gofile_url;
             openLink.style.display = "block";
+            
+            // Automatically start the download
+            window.location.href = data.gofile_url; 
+        } else {
+            statusText.textContent = data.error || `No record found for ID ${id}.`;
         }
 
     } catch (error) {
